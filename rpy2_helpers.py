@@ -17,6 +17,16 @@ rprint = globalenv.get("print")
 
 
 def xyplot(formula, data, **kwargs):
+    """Call lattice's `xyplot` with the given `formula` and `data`.
+
+    You can supply `formula` as a string or rpy2 `Formula`.
+
+    You can supply `data` as a dict or rpy2 `DataFrame`.
+
+    """
+
+    if not isinstance(data, DataFrame):
+        data = DataFrame(data)
     if not isinstance(formula, Formula):
         formula = Formula(formula)
     plot = lattice.xyplot(
