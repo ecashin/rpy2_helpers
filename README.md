@@ -15,11 +15,21 @@ noise in here.  An example usage is in the `main` function of the
 
 This example shows how to do a simple scatterplot.
 
-    from rpy2_helpers import xyplot
     import numpy as np
+    from rpy2_helpers import xyplot
     
     x = np.random.random_integers(1, 100, 100)
     y = np.log(x)
     
     xyplot('y ~ x', {'x': x, 'y': y})
 
+Here's a simple box and whisker plot.
+
+    import numpy as np
+    from rpy2_helpers import bwplot
+
+    x = np.random.normal(size=100)
+    # make it positive-heavy
+    x = np.concatenate((x, 3 * (x + x.max())))
+    big = x > 0
+    bwplot('~ x | big', {'x': x, 'big': big})

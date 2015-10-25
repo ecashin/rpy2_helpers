@@ -39,6 +39,13 @@ def do_plot(plot_fn, formula, data, **kwargs):
     rprint(plot)
 
 
+def bwplot(formula, data, **kwargs):
+    do_plot(lattice.bwplot, formula, data, **kwargs)
+
+
+bwplot.__doc__ = DOC_TPT.format('bwplot')
+
+
 def xyplot(formula, data, **kwargs):
     do_plot(lattice.xyplot, formula, data, **kwargs)
 
