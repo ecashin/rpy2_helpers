@@ -7,7 +7,7 @@ to remember a lot of details.
 """
 
 import click
-from rpy2.robjects import Formula, globalenv
+from rpy2.robjects import DataFrame, Formula, globalenv
 from rpy2.robjects.packages import importr
 
 
@@ -29,7 +29,6 @@ def main():
     import numpy as np
     from rpy2.robjects import numpy2ri
     numpy2ri.activate()
-    from rpy2.robjects import DataFrame
 
     x = np.random.random_integers(0, 100, 100)
     x.sort()
