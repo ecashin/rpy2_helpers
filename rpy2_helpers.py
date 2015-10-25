@@ -7,8 +7,12 @@ to remember a lot of details.
 """
 
 import click
-from rpy2.robjects import DataFrame, Formula, globalenv
+from rpy2.robjects import DataFrame, Formula, globalenv, numpy2ri
 from rpy2.robjects.packages import importr
+
+
+# Automatically convert numpy arrays to R vectors.
+numpy2ri.activate()
 
 
 grdevices = importr('grDevices')
@@ -16,32 +20,37 @@ lattice = importr('lattice')
 rprint = globalenv.get("print")
 
 
-def xyplot(formula, data, **kwargs):
-    """Call lattice's `xyplot` with the given `formula` and `data`.
+DOC_TPT = """Call `{}` with the given `formula` and `data`.
 
-    You can supply `formula` as a string or rpy2 `Formula`.
+You can supply `formula` as a string or rpy2 `Formula`.
 
-    You can supply `data` as a dict or rpy2 `DataFrame`.
+You can supply `data` as a dict or rpy2 `DataFrame`.
 
-    """
+"""
 
+
+def do_plot(plot_fn, formula, data, **kwargs):
     if not isinstance(data, DataFrame):
         data = DataFrame(data)
     if not isinstance(formula, Formula):
         formula = Formula(formula)
-    plot = lattice.xyplot(
+    plot = plot_fn(
         formula, data, **kwargs)
     rprint(plot)
+
+
+def xyplot(formula, data, **kwargs):
+    do_plot(lattice.xyplot, formula, data, **kwargs)
+
+
+xyplot.__doc__ = DOC_TPT.format('xyplot')
 
 
 @click.command()
 def main():
     import numpy as np
-    from rpy2.robjects import numpy2ri
-    numpy2ri.activate()
 
     x = np.random.random_integers(0, 100, 100)
-    x.sort()
     y = np.square(x)
     xyplot('y ~ x', DataFrame({'x': x, 'y': y}))
     raw_input('Hit enter to exit.')
