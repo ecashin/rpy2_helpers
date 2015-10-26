@@ -28,7 +28,7 @@ This example shows how to do a simple scatterplot.
     
     xyplot('y ~ x', {'x': x, 'y': y})
 
-Here's a simple box and whisker plot.
+Here's a simple box and whisker plot with two groups.
 
 ::
 
@@ -38,5 +38,7 @@ Here's a simple box and whisker plot.
     x = np.random.normal(size=100)
     # make it positive-heavy
     x = np.concatenate((x, 3 * (x + x.max())))
-    big = x > 0
+    big = np.chararray(shape=x.shape, itemsize=5)
+    big[x>0] = 'big'
+    big[x<=0] = 'small'
     bwplot('~ x | big', {'x': x, 'big': big})
