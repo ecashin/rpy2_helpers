@@ -7,6 +7,7 @@ to remember a lot of details.
 """
 
 import click
+import rpy2.robjects
 from rpy2.robjects import DataFrame, Formula, globalenv, numpy2ri
 from rpy2.robjects.packages import importr
 
@@ -17,6 +18,7 @@ numpy2ri.activate()
 
 grdevices = importr('grDevices')
 lattice = importr('lattice')
+robjects = rpy2.robjects
 rprint = globalenv.get("print")
 
 

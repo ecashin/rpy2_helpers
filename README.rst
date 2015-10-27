@@ -28,6 +28,19 @@ This example shows how to do a simple scatterplot.
     
     xyplot('y ~ x', {'x': x, 'y': y})
 
+You can provide the keywords that xyplot handles.
+
+::
+
+    import numpy as np
+    from rpy2_helpers import xyplot
+    
+    x = np.arange(-4, 4, 0.1)
+    y = np.tanh(x)
+    
+    xyplot('y ~ x', {'x': x, 'y': y}, main='tanh(x)')
+
+
 Here's a simple box and whisker plot with two groups.
 
 ::
@@ -42,3 +55,38 @@ Here's a simple box and whisker plot with two groups.
     big[x>0] = 'big'
     big[x<=0] = 'small'
     bwplot('~ x | big', {'x': x, 'big': big})
+
+
+Fancy Example
+-------------
+
+If you want more fanciness, it's either dive into rpy2's details or go
+to an R prompt.  The example below uses a custom panel function
+(defined inside the R environment as function ``my.panel.fn``) to plot
+a line along with the sigmoid function.
+
+You can programmatically cause the display to go away with ``dev_off``.
+
+::
+
+    from time import sleep
+    import numpy as np
+    from rpy2_helpers import grdevices, robjects, xyplot
+    
+    x = np.arange(-4, 4, 0.1)
+    y = 1/(1 + np.exp(-x))
+    
+    robjects.r('''
+        my.panel.fn <- function(x, y, subscripts) {
+    	    panel.xyplot(x, y)
+    	    panel.lmline(x, y)
+    	}
+    ''')
+    xyplot(
+        'y ~ x',
+    	{'x': x, 'y': y},
+    	main='linear approximation to sigmoid',
+    	panel=robjects.globalenv['my.panel.fn'])
+    
+    sleep(3)
+    grdevices.dev_off()
