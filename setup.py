@@ -9,7 +9,7 @@ setup(
     author='Ed L. Cashin',
     author_email='ed.cashin@acm.org',
     url='https://github.com/ecashin/rpy2_helpers',
-    version='0.1',
+    version='0.2',
     scripts = ['rpy2_helpers.py'],
     install_requires=[
         'click',
