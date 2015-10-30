@@ -1,12 +1,10 @@
-#! /usr/bin/env python2.7
-"""Avoid some boilerplate rpy2 usage code with helpers.
+"""rpy2_helpers - Avoid some boilerplate rpy2 usage code
 
 Mostly I wrote this so that I can use xyplot without having
 to remember a lot of details.
 
 """
 
-import click
 import rpy2.robjects
 from rpy2.robjects import DataFrame, Formula, globalenv, numpy2ri
 from rpy2.robjects.packages import importr
@@ -53,18 +51,3 @@ def xyplot(formula, data, **kwargs):
 
 
 xyplot.__doc__ = DOC_TPT.format('xyplot')
-
-
-@click.command()
-def main():
-    import numpy as np
-
-    x = np.random.random_integers(0, 100, 100)
-    y = np.square(x)
-    xyplot('y ~ x', DataFrame({'x': x, 'y': y}))
-    raw_input('Hit enter to exit.')
-    grdevices.dev_off()
-
-
-if __name__ == '__main__':
-    main()
