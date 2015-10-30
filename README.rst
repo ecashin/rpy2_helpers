@@ -65,28 +65,35 @@ to an R prompt.  The example below uses a custom panel function
 (defined inside the R environment as function ``my.panel.fn``) to plot
 a line along with the sigmoid function.
 
+Note that ``robjects.r`` returns an object that lives in R's world,
+and you can pass it back to R.  In the example below, that's a custom
+panel function composed in R.
+
 You can programmatically cause the display to go away with ``dev_off``.
 
 ::
 
     from time import sleep
     import numpy as np
+    
     from rpy2_helpers import grdevices, robjects, xyplot
     
     x = np.arange(-4, 4, 0.1)
-    y = 1/(1 + np.exp(-x))
-    
-    robjects.r('''
-        my.panel.fn <- function(x, y, subscripts) {
-    	    panel.xyplot(x, y)
-    	    panel.lmline(x, y)
-    	}
+    data = {
+        'x': x,
+        'y': 1/(1 + np.exp(-x)),
+    }
+    my_panel = robjects.r('''
+        function(x, y, subscripts) {
+            panel.xyplot(x, y)
+            panel.lmline(x, y)
+        }
     ''')
     xyplot(
         'y ~ x',
-    	{'x': x, 'y': y},
-    	main='linear approximation to sigmoid',
-    	panel=robjects.globalenv['my.panel.fn'])
+        data,
+        main='linear approximation to sigmoid',
+        panel=my_panel)
     
     sleep(3)
     grdevices.dev_off()
